@@ -23,5 +23,10 @@ if [ ! -e "/etc/timezone" ] && [ -z "${TZ}" ]; then
     export TZ="America/Chicago"
 fi
 
-# Run command
-"$@"
+# If no args, enter bash shell
+if [[ $# -eq 0 ]]
+    then
+        /bin/bash --noprofile --norc
+    else
+        /bin/bash --noprofile --norc -c "$*"
+fi
