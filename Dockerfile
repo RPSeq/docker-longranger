@@ -34,10 +34,7 @@ RUN cd /tmp/ && \
 	tar zxf "longranger-${LONGRANGER_VERSION}.tar.gz" && \
 	rm -f "longranger-${LONGRANGER_VERSION}.tar.gz" /longranger
 
-# Shell script for CMD to setup ENV
-RUN mkdir /opt/bin/
-
-# Copy longranger entry scripts
+# Copy longranger entrypoint script and make executable
 COPY longranger /opt/bin/
 RUN chmod 777 /opt/bin/longranger
 
@@ -46,5 +43,5 @@ COPY lsf.template "/opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobman
 RUN chmod 777 "/opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers"
 RUN chmod 666 "/opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers/*.template"
 
-# Entrypoint is the longranger wrapper scipt
+# Longranger entrypoint script
 ENTRYPOINT ["/opt/bin/longranger"]
