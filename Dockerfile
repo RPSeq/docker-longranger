@@ -24,29 +24,27 @@ RUN cd /tmp/ && \
 	cd /tmp/ && \
 	rm -rf bcl2fastq/
 
-# LONG RANGER VERSION
+# Set longranger version and install
 ENV LONGRANGER_VERSION 2.1.3
-
-# Install longranger
 RUN cd /tmp/ && \
 	git clone git://git/10x-genomics-longranger --branch "v${LONGRANGER_VERSION}" --single-branch longranger && \
 	cd longranger && \
-	cp longranger-${LONGRANGER_VERSION}.tar.gz /opt/ && \
+	cp "longranger-${LONGRANGER_VERSION}.tar.gz" /opt/ && \
 	cd /opt/ && \
-	tar zxf longranger-${LONGRANGER_VERSION}.tar.gz && \
-	rm -f longranger-${LONGRANGER_VERSION}.tar.gz /longranger
+	tar zxf "longranger-${LONGRANGER_VERSION}.tar.gz" && \
+	rm -f "longranger-${LONGRANGER_VERSION}.tar.gz" /longranger
 
 # Shell script for CMD to setup ENV
 RUN mkdir /opt/bin/
 
-# Copy longranger entry script
+# Copy longranger entry scripts
 COPY longranger /opt/bin/
 RUN chmod 777 /opt/bin/longranger
 
-# Copy martian lsf template
-COPY lsf.template /opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers
-RUN chmod 777 /opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers
-RUN chmod 666 /opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers/*.template
+# Copy martian lsf template and chmod so users can customize jobmanager templates
+COPY lsf.template "/opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers"
+RUN chmod 777 "/opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers"
+RUN chmod 666 "/opt/longranger-${LONGRANGER_VERSION}/martian-cs/2.1.2/jobmanagers/*.template"
 
 # Entrypoint is the longranger wrapper scipt
 ENTRYPOINT ["/opt/bin/longranger"]
